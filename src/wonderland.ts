@@ -4062,30 +4062,51 @@ export class Object3D {
 
     /* `getComponent` overloads for native components. */
 
-    /** @overload */
+    /**
+     * Get a component attached to this object.
+     * @overload
+     */
     getComponent(type: 'collision', index?: number): CollisionComponent | null;
-    /** @overload */
+    /**
+     * Get a component attached to this object.
+     * @overload
+     */
     getComponent(type: 'text', index?: number): TextComponent | null;
-    /** @overload */
+    /**
+     * Get a component attached to this object.
+     * @overload
+     */
     getComponent(type: 'view', index?: number): ViewComponent | null;
-    /** @overload */
+    /**
+     * Get a component attached to this object.
+     * @overload
+     */
     getComponent(type: 'mesh', index?: number): MeshComponent | null;
-    /** @overload */
+    /**
+     * Get a component attached to this object.
+     * @overload
+     */
     getComponent(type: 'input', index?: number): InputComponent | null;
-    /** @overload */
+    /**
+     * Get a component attached to this object.
+     * @overload
+     */
     getComponent(type: 'light', index?: number): LightComponent | null;
-    /** @overload */
+    /**
+     * Get a component attached to this object.
+     * @overload
+     */
     getComponent(type: 'animation', index?: number): AnimationComponent | null;
-    /** @overload */
+    /**
+     * Get a component attached to this object.
+     * @overload
+     */
     getComponent(type: 'physx', index?: number): PhysXComponent | null;
-    /** @overload */
+    /**
+     * Get a component attached to this object.
+     * @overload
+     */
     getComponent(typeOrClass: string, index?: number): Component | null;
-    /** @overload */
-    getComponent<T extends Component>(
-        typeOrClass: ComponentConstructor<T>,
-        index?: number
-    ): T | null;
-
     /**
      * Get a component attached to this object.
      *
@@ -4095,6 +4116,11 @@ export class Object3D {
      *      components if the object has multiple components of the same type.
      * @returns The component or `null` if there is no such component on this object
      */
+    getComponent<T extends Component>(
+        typeOrClass: ComponentConstructor<T>,
+        index?: number
+    ): T | null;
+
     getComponent(
         typeOrClass: string | ComponentConstructor,
         index?: number
@@ -4127,28 +4153,54 @@ export class Object3D {
 
     /* `getComponents` overloads for native components. */
 
-    /** @overload */
-    getComponents(type: 'collision'): CollisionComponent[];
-    /** @overload */
-    getComponents(type: 'text'): TextComponent[];
-    /** @overload */
-    getComponents(type: 'view'): ViewComponent[];
-    /** @overload */
-    getComponents(type: 'mesh'): MeshComponent[];
-    /** @overload */
-    getComponents(type: 'input'): InputComponent[];
-    /** @overload */
-    getComponents(type: 'light'): LightComponent[];
-    /** @overload */
-    getComponents(type: 'animation'): AnimationComponent[];
-    /** @overload */
-    getComponents(type: 'physx'): PhysXComponent[];
-    /** @overload */
-    getComponents(type?: string | null): Component[];
-    /** @overload */
-    getComponents<T extends Component>(typeClass: ComponentConstructor<T>): T[];
-
     /**
+     * Get an array of components attached to this object.
+     * @overload
+     */
+    getComponents(type: 'collision'): CollisionComponent[];
+    /**
+     * Get an array of components attached to this object.
+     * @overload
+     */
+    getComponents(type: 'text'): TextComponent[];
+    /**
+     * Get an array of components attached to this object.
+     * @overload
+     */
+    getComponents(type: 'view'): ViewComponent[];
+    /**
+     * Get an array of components attached to this object.
+     * @overload
+     */
+    getComponents(type: 'mesh'): MeshComponent[];
+    /**
+     * Get an array of components attached to this object.
+     * @overload
+     */
+    getComponents(type: 'input'): InputComponent[];
+    /**
+     * Get an array of components attached to this object.
+     * @overload
+     */
+    getComponents(type: 'light'): LightComponent[];
+    /**
+     * Get an array of components attached to this object.
+     * @overload
+     */
+    getComponents(type: 'animation'): AnimationComponent[];
+    /**
+     * Get an array of components attached to this object.
+     * @overload
+     */
+    getComponents(type: 'physx'): PhysXComponent[];
+    /**
+     * Get an array of components attached to this object.
+     * @overload
+     */
+    getComponents(type?: string | null): Component[];
+    /**
+     * Get an array of components attached to this object.
+     *
      * @param typeOrClass Type name, pass a falsey value (`undefined` or `null`) to retrieve all.
      *     It's also possible to give a class definition. In this case, the method will use the `class.TypeName` field to
      *     find the components.
@@ -4158,6 +4210,8 @@ export class Object3D {
      *      but rather store its result in `init()` or `start()`
      * @warning This method will currently return at most 341 components.
      */
+    getComponents<T extends Component>(typeClass: ComponentConstructor<T>): T[];
+
     getComponents<T extends Component>(
         typeOrClass?: string | ComponentConstructor<T> | null
     ): T[] {
