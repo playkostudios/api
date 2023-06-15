@@ -4064,63 +4064,38 @@ export class Object3D {
 
     /**
      * Get a component attached to this object.
-     * @overload
-     */
-    getComponent(type: 'collision', index?: number): CollisionComponent | null;
-    /**
-     * Get a component attached to this object.
-     * @overload
-     */
-    getComponent(type: 'text', index?: number): TextComponent | null;
-    /**
-     * Get a component attached to this object.
-     * @overload
-     */
-    getComponent(type: 'view', index?: number): ViewComponent | null;
-    /**
-     * Get a component attached to this object.
-     * @overload
-     */
-    getComponent(type: 'mesh', index?: number): MeshComponent | null;
-    /**
-     * Get a component attached to this object.
-     * @overload
-     */
-    getComponent(type: 'input', index?: number): InputComponent | null;
-    /**
-     * Get a component attached to this object.
-     * @overload
-     */
-    getComponent(type: 'light', index?: number): LightComponent | null;
-    /**
-     * Get a component attached to this object.
-     * @overload
-     */
-    getComponent(type: 'animation', index?: number): AnimationComponent | null;
-    /**
-     * Get a component attached to this object.
-     * @overload
-     */
-    getComponent(type: 'physx', index?: number): PhysXComponent | null;
-    /**
-     * Get a component attached to this object.
-     * @overload
-     */
-    getComponent(typeOrClass: string, index?: number): Component | null;
-    /**
-     * Get a component attached to this object.
      *
      * @param typeOrClass Type name. It's also possible to give a class definition.
      *     In this case, the method will use the `class.TypeName` field to find the component.
      * @param index=0 Index for component of given type. This can be used to access specific
      *      components if the object has multiple components of the same type.
      * @returns The component or `null` if there is no such component on this object
+     * @overload
      */
+    getComponent(type: 'collision', index?: number): CollisionComponent | null;
+    /** {@inheritDoc Object3D#getComponent:0} */
+    getComponent(type: 'text', index?: number): TextComponent | null;
+    /** {@inheritDoc Object3D#getComponent:0} */
+    getComponent(type: 'view', index?: number): ViewComponent | null;
+    /** {@inheritDoc Object3D#getComponent:0} */
+    getComponent(type: 'mesh', index?: number): MeshComponent | null;
+    /** {@inheritDoc Object3D#getComponent:0} */
+    getComponent(type: 'input', index?: number): InputComponent | null;
+    /** {@inheritDoc Object3D#getComponent:0} */
+    getComponent(type: 'light', index?: number): LightComponent | null;
+    /** {@inheritDoc Object3D#getComponent:0} */
+    getComponent(type: 'animation', index?: number): AnimationComponent | null;
+    /** {@inheritDoc Object3D#getComponent:0} */
+    getComponent(type: 'physx', index?: number): PhysXComponent | null;
+    /** {@inheritDoc Object3D#getComponent:0} */
+    getComponent(typeOrClass: string, index?: number): Component | null;
+    /** {@inheritDoc Object3D#getComponent:0} */
     getComponent<T extends Component>(
         typeOrClass: ComponentConstructor<T>,
         index?: number
     ): T | null;
 
+    /** {@inheritDoc Object3D#getComponent:0} */
     getComponent(
         typeOrClass: string | ComponentConstructor,
         index?: number
@@ -4155,63 +4130,39 @@ export class Object3D {
 
     /**
      * Get an array of components attached to this object.
-     * @overload
-     */
-    getComponents(type: 'collision'): CollisionComponent[];
-    /**
-     * Get an array of components attached to this object.
-     * @overload
-     */
-    getComponents(type: 'text'): TextComponent[];
-    /**
-     * Get an array of components attached to this object.
-     * @overload
-     */
-    getComponents(type: 'view'): ViewComponent[];
-    /**
-     * Get an array of components attached to this object.
-     * @overload
-     */
-    getComponents(type: 'mesh'): MeshComponent[];
-    /**
-     * Get an array of components attached to this object.
-     * @overload
-     */
-    getComponents(type: 'input'): InputComponent[];
-    /**
-     * Get an array of components attached to this object.
-     * @overload
-     */
-    getComponents(type: 'light'): LightComponent[];
-    /**
-     * Get an array of components attached to this object.
-     * @overload
-     */
-    getComponents(type: 'animation'): AnimationComponent[];
-    /**
-     * Get an array of components attached to this object.
-     * @overload
-     */
-    getComponents(type: 'physx'): PhysXComponent[];
-    /**
-     * Get an array of components attached to this object.
-     * @overload
-     */
-    getComponents(type?: string | null): Component[];
-    /**
-     * Get an array of components attached to this object.
+     *
+     * As this function is non-trivial, avoid using it in `update()` repeatedly,
+     * but rather store its result in `init()` or `start()`
+     *
+     * This method will currently return at most 341 components.
      *
      * @param typeOrClass Type name, pass a falsey value (`undefined` or `null`) to retrieve all.
      *     It's also possible to give a class definition. In this case, the method will use the `class.TypeName` field to
      *     find the components.
      * @returns All components of given type attached to this object.
-     *
-     * @note As this function is non-trivial, avoid using it in `update()` repeatedly,
-     *      but rather store its result in `init()` or `start()`
-     * @warning This method will currently return at most 341 components.
+     * @overload
      */
+    getComponents(type: 'collision'): CollisionComponent[];
+    /** {@inheritDoc Object3D#getComponents:0} */
+    getComponents(type: 'text'): TextComponent[];
+    /** {@inheritDoc Object3D#getComponents:0} */
+    getComponents(type: 'view'): ViewComponent[];
+    /** {@inheritDoc Object3D#getComponents:0} */
+    getComponents(type: 'mesh'): MeshComponent[];
+    /** {@inheritDoc Object3D#getComponents:0} */
+    getComponents(type: 'input'): InputComponent[];
+    /** {@inheritDoc Object3D#getComponents:0} */
+    getComponents(type: 'light'): LightComponent[];
+    /** {@inheritDoc Object3D#getComponents:0} */
+    getComponents(type: 'animation'): AnimationComponent[];
+    /** {@inheritDoc Object3D#getComponents:0} */
+    getComponents(type: 'physx'): PhysXComponent[];
+    /** {@inheritDoc Object3D#getComponents:0} */
+    getComponents(type?: string | null): Component[];
+    /** {@inheritDoc Object3D#getComponents:0} */
     getComponents<T extends Component>(typeClass: ComponentConstructor<T>): T[];
 
+    /** {@inheritDoc Object3D#getComponents:0} */
     getComponents<T extends Component>(
         typeOrClass?: string | ComponentConstructor<T> | null
     ): T[] {
