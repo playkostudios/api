@@ -681,11 +681,17 @@ export class WonderlandEngine {
         const c =
             this._componentCache[componentType] ||
             (this._componentCache[componentType] = []);
-        if (c[componentId]) {
-            return c[componentId];
+
+        let component = c[componentId];
+        if (component) {
+            // HACK WLE 1.1.6 has a design flaw where _manager and _id can
+            //      become stale. override these with known values when possible
+            //      to work around that issue
+            (component._manager as number) = componentType;
+            (component._id as number) = componentId;
+            return component;
         }
 
-        let component: Component;
         if (type == 'collision') {
             component = new CollisionComponent(this, componentType, componentId);
         } else if (type == 'text') {

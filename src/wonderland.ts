@@ -5218,7 +5218,16 @@ export class Object3D {
             componentType,
             index
         );
-        return this._engine._wrapComponent(type, componentType, componentId);
+        const component = this._engine._wrapComponent(type, componentType, componentId);
+
+        // HACK WLE 1.1.6 has a design flaw where the object property of a
+        //      component can become stale for native components. override the
+        //      tracked object when possible to work around that issue
+        if (component) {
+            component._object = this;
+        }
+
+        return component;
     }
 
     /* `getComponents` overloads for native components. */
@@ -5303,6 +5312,14 @@ export class Object3D {
                 );
             }
         }
+
+        // HACK WLE 1.1.6 has a design flaw where the object property of a
+        //      component can become stale for native components. override the
+        //      tracked object when possible to work around that issue
+        for (const component of components) {
+            component._object = this;
+        }
+
         return components as T[];
     }
 
@@ -5400,6 +5417,13 @@ export class Object3D {
          * we activate it as a final step. This invalidates componentIndex! */
         if (!params || !('active' in params && !params.active)) {
             component.active = true;
+        }
+
+        // HACK WLE 1.1.6 has a design flaw where the object property of a
+        //      component can become stale for native components. override the
+        //      tracked object when possible to work around that issue
+        if (component) {
+            component._object = this;
         }
 
         return component;
