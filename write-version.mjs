@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import {writeFileSync} from 'fs';
-import pkg from './package.json' assert { type: 'json' };
+import pkg from './package.json' with { type: 'json' };
 
 /* TypeScript output file, where the version will be written. */
 const Output = './src/version.ts';
