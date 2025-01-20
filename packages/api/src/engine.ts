@@ -23,7 +23,7 @@ import {MeshManager} from './resources/mesh-manager.js';
 import {ResourceManager} from './resources/resource.js';
 import {TextureManager} from './resources/texture-manager.js';
 import {LogTag} from './index.js';
-import {Constructor, ImageLike, ProgressCallback} from './types.js';
+import {Constructor, ImageLike, ImageBitmapProvider, ProgressCallback} from './types.js';
 import {Prefab, InMemoryLoadOptions, LoadOptions, StreamLoadOptions} from './prefab.js';
 import {Scene, ActivateOptions, ChunkedSceneLoadSink, SceneType} from './scene.js';
 import {PrefabGLTF, GLTFOptions} from './scene-gltf.js';
@@ -943,10 +943,10 @@ export class WonderlandEngine {
      * Promise that resolve once all uncompressed images are loaded.
      *
      * This is equivalent to calling {@link WonderlandEngine.images}, and wrapping each
-     * `load` listener into a promise.
+     * `load` listener into a promise, except for ImageBitmapProviders.
      */
     get imagesPromise(): Promise<ImageLike[]> {
-        const promises = this.images.map((i) => onImageReady(i));
+        const promises = this.images.map((i) => (i instanceof ImageBitmapProvider) ? Promise.resolve(i) : onImageReady(i));
         return Promise.all(promises);
     }
 

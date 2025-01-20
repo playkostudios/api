@@ -9,7 +9,7 @@ import {Emitter} from './utils/event.js';
 import {Material} from './resources/material-manager.js';
 import {ComponentProperty, Type, defaultPropertyCloner} from './property.js';
 import {WASM} from './wasm.js';
-import {Constructor, ImageLike, NumberArray, TypedArray, TypedArrayCtor} from './types.js';
+import {Constructor, ImageLike, ImageBitmapProvider, NumberArray, TypedArray, TypedArrayCtor} from './types.js';
 import {Resource, SceneResource} from './resources/resource.js';
 import {Prefab} from './prefab.js';
 import {Scene} from './scene.js';
@@ -4217,9 +4217,9 @@ export class Texture extends Resource {
     /** Width of the texture. */
     get width(): number {
         /* HTML textures should be read directly from js, since the C++ could be
-         * one frame out-of-sync on the size of the element itself. */
-        const element = this.htmlElement;
-        if (element) return element.width;
+         * one frame out-of-sync on the size of the backing data itself. */
+        const data = this.backingData;
+        if (data) return data.width;
 
         const wasm = this.engine.wasm;
         wasm._wl_image_size(this._imageIndex, wasm._tempMem);
@@ -4229,9 +4229,9 @@ export class Texture extends Resource {
     /** Height of the texture. */
     get height(): number {
         /* HTML textures should be read directly from js, since the C++ could be
-         * one frame out-of-sync on the size of the element itself. */
-        const element = this.htmlElement;
-        if (element) return element.height;
+         * one frame out-of-sync on the size of the backing data itself. */
+        const data = this.backingData;
+        if (data) return data.height;
 
         const wasm = this.engine.wasm;
         wasm._wl_image_size(this._imageIndex, wasm._tempMem);
@@ -4239,11 +4239,11 @@ export class Texture extends Resource {
     }
 
     /**
-     * Returns the html element associated to this texture.
+     * Returns the html element or ImageBitmapProvider associated to this texture.
      *
      * @note This accessor will return `null` if the image is compressed.
      */
-    get htmlElement(): ImageLike | null {
+    get backingData(): ImageLike | null {
         const image = this._imageIndex;
         if (!image) return null;
 
@@ -4252,6 +4252,17 @@ export class Texture extends Resource {
 
         /* Since the first element is `null`, no need to check for `jsImageIndex` */
         return wasm._images[jsImageIndex];
+    }
+
+    /**
+     * Returns the html element associated to this texture.
+     *
+     * @note This accessor will return `null` if the image is compressed, or backed by an ImageBitmapProvider.
+     * @deprecated Use {@link Texture#backingData} instead.
+     */
+    get htmlElement(): ImageLike | null {
+        const backingData = this.backingData;
+        return (backingData instanceof ImageBitmapProvider) ? null : backingData;
     }
 
     /**
@@ -4296,11 +4307,20 @@ export class Texture extends Resource {
         const img = wasm._images[jsImageIndex];
         if (!img) return;
 
+        /** @todo: The type of image can be decided in advance and cached, which
+         * would remove the need to do instanceof checks here. */
+        let imgData: CanvasImageSource;
+        if (img instanceof ImageBitmapProvider) {
+            imgData = img.getData();
+        } else {
+            imgData = img;
+        }
+
         /** @todo: If the image is an instance of canvas, this
          * can be skipped entirely. */
         temp2d.canvas.width = w;
         temp2d.canvas.height = h;
-        temp2d.ctx.drawImage(img, x, y, w, h, 0, 0, w, h);
+        temp2d.ctx.drawImage(imgData, x, y, w, h, 0, 0, w, h);
 
         const yOffset = ((img as HTMLVideoElement).videoHeight ?? img.height) - y - h;
         wasm._images[jsImageIndex] = temp2d.canvas;

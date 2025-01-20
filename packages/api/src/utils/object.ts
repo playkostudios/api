@@ -1,4 +1,4 @@
-import {ImageLike} from '../types.js';
+import {ImageLike, ImageBitmapProvider} from '../types.js';
 
 /**
  * Check if a given value is a native string or a `String` instance.
@@ -32,6 +32,7 @@ export function isImageLike(value: any): value is ImageLike {
     return (
         value instanceof HTMLImageElement ||
         value instanceof HTMLVideoElement ||
-        value instanceof HTMLCanvasElement
+        value instanceof HTMLCanvasElement ||
+        value instanceof ImageBitmapProvider
     );
 }

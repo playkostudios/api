@@ -1,4 +1,4 @@
-import {ImageLike, ProgressCallback} from '../types.js';
+import {ImageLike, ImageBitmapProvider, ProgressCallback} from '../types.js';
 
 /**
  * Transformer for {@link TransformStream} that passes read progress to a
@@ -190,7 +190,7 @@ export function getFilename(url: string): string {
  * @param image The image, video, or canvas to wait for.
  * @returns A promise with the image, once it's ready to be used.
  */
-export function onImageReady<T extends ImageLike>(image: T): Promise<T> {
+export function onImageReady<T extends Exclude<ImageLike, ImageBitmapProvider>>(image: T): Promise<T> {
     return new Promise((res, rej) => {
         if (image instanceof HTMLCanvasElement) {
             res(image);

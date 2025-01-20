@@ -1,5 +1,14 @@
+/**
+ * A class meant to be implemented by the user which gives the engine
+ * preprepared image data, for low-latency texture uploads.
+ */
+export abstract class ImageBitmapProvider {
+    constructor(readonly width: number, readonly height: number) {}
+    abstract getData(): ImageBitmap;
+}
+
 /** Element that can be used as an image in the engine. */
-export type ImageLike = HTMLImageElement | HTMLVideoElement | HTMLCanvasElement;
+export type ImageLike = HTMLImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmapProvider;
 
 /**
  * A type alias for any TypedArray constructor, except big-int arrays.
