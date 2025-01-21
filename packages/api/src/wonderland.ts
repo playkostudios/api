@@ -4325,8 +4325,10 @@ export class Texture extends Resource {
 
         const yOffset = ((img as HTMLVideoElement).videoHeight ?? img.height) - y - h;
         wasm._images[jsImageIndex] = temp2d.canvas;
+        wasm._imageTypes[jsImageIndex] = ImageType.ImageBitmapProvider;
         wasm._wl_renderer_updateImage(image, x, yOffset);
         wasm._images[jsImageIndex] = img;
+        wasm._imageTypes[jsImageIndex] = imgType;
     }
 
     /**
