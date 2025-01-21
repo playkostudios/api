@@ -13,7 +13,7 @@ import {
     XR,
     AnimationComponent,
 } from './wonderland.js';
-import {ImageLike} from './types.js';
+import {ImageLike, ImageType} from './types.js';
 import {Scene} from './scene.js';
 
 type XRRequestSessionFunction = (
@@ -249,6 +249,8 @@ export class WASM {
 
     /** Image cache. */
     _images: (ImageLike | null)[] = [null];
+    /** Image type cache. */
+    _imageTypes: ImageType[] = [ImageType.Compressed];
 
     /** Component instances. */
     private _components: Component[] = null!;
@@ -314,6 +316,7 @@ export class WASM {
 
         this._components = null!;
         this._images.length = 1;
+        this._imageTypes.length = 1;
         this.allocateTempMemory(1024);
 
         this._componentTypes = [];
@@ -614,6 +617,7 @@ export class WASM {
         if (!img) return;
 
         this._images[index] = null;
+        this._imageTypes[index] = ImageType.Compressed;
 
         if ((img as HTMLImageElement).src !== undefined) {
             (img as HTMLImageElement).src = '';

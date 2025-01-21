@@ -10,6 +10,15 @@ export abstract class ImageBitmapProvider {
 /** Element that can be used as an image in the engine. */
 export type ImageLike = HTMLImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmapProvider;
 
+/** Type of a cached image, for performance and technical reasons. */
+export const enum ImageType {
+    Compressed,
+    Image,
+    Video,
+    Canvas,
+    ImageBitmapProvider,
+}
+
 /**
  * A type alias for any TypedArray constructor, except big-int arrays.
  */

@@ -1,8 +1,8 @@
 import {WonderlandEngine} from '../index.js';
-import {ImageLike} from '../types.js';
+import {ImageBitmapProvider, ImageLike, ImageType} from '../types.js';
 import {Texture} from '../wonderland.js';
 
-import {ResourceManager, SceneResource} from './resource.js';
+import {ResourceManager} from './resource.js';
 
 /**
  * Manage textures.
@@ -42,17 +42,32 @@ export class TextureManager extends ResourceManager<Texture> {
      * load the media and create a texture, use {@link TextureManager.load} instead.
      *
      * @param image Media element to create the texture from.
-     * @ret\urns The new texture with the media content.
+     * @returns The new texture with the media content.
      */
     create(image: ImageLike): Texture {
         const wasm = this.engine.wasm;
 
+        let imgType: ImageType;
+        if (image instanceof HTMLImageElement) {
+            if (!image.complete) {
+                throw new Error('image must be ready to create a texture');
+            }
+
+            imgType = ImageType.Image;
+        } else if (image instanceof HTMLVideoElement) {
+            imgType = ImageType.Video;
+        } else if (image instanceof HTMLCanvasElement) {
+            imgType = ImageType.Canvas;
+        } else if (image instanceof ImageBitmapProvider) {
+            imgType = ImageType.ImageBitmapProvider;
+        } else {
+            /* Kept like this for backward compatible behavior. Not sure if this is the best behavior */
+            imgType = ImageType.Image;
+        }
+
         const jsImageIndex = wasm._images.length;
         wasm._images.push(image);
-
-        if (image instanceof HTMLImageElement && !image.complete) {
-            throw new Error('image must be ready to create a texture');
-        }
+        wasm._imageTypes.push(imgType);
 
         const width = (image as HTMLVideoElement).videoWidth ?? image.width;
         const height = (image as HTMLVideoElement).videoHeight ?? image.height;

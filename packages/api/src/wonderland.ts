@@ -9,7 +9,7 @@ import {Emitter} from './utils/event.js';
 import {Material} from './resources/material-manager.js';
 import {ComponentProperty, Type, defaultPropertyCloner} from './property.js';
 import {WASM} from './wasm.js';
-import {Constructor, ImageLike, ImageBitmapProvider, NumberArray, TypedArray, TypedArrayCtor} from './types.js';
+import {Constructor, ImageLike, ImageBitmapProvider, NumberArray, TypedArray, TypedArrayCtor, ImageType} from './types.js';
 import {Resource, SceneResource} from './resources/resource.js';
 import {Prefab} from './prefab.js';
 import {Scene} from './scene.js';
@@ -4260,9 +4260,10 @@ export class Texture extends Resource {
      * @note This accessor will return `null` if the image is compressed, or backed by an ImageBitmapProvider.
      * @deprecated Use {@link Texture#backingData} instead.
      */
-    get htmlElement(): ImageLike | null {
-        const backingData = this.backingData;
-        return (backingData instanceof ImageBitmapProvider) ? null : backingData;
+    get htmlElement(): Exclude<ImageLike, ImageBitmapProvider> | null {
+        const imgType = this.engine.wasm._imageTypes[this._imageIndex];
+        if (imgType === ImageType.ImageBitmapProvider) return null;
+        return this.backingData as Exclude<ImageLike, ImageBitmapProvider> | null;
     }
 
     /**
@@ -4307,13 +4308,13 @@ export class Texture extends Resource {
         const img = wasm._images[jsImageIndex];
         if (!img) return;
 
-        /** @todo: The type of image can be decided in advance and cached, which
-         * would remove the need to do instanceof checks here. */
+        const imgType = wasm._imageTypes[jsImageIndex];
+
         let imgData: CanvasImageSource;
-        if (img instanceof ImageBitmapProvider) {
-            imgData = img.getData();
+        if (imgType === ImageType.ImageBitmapProvider) {
+            imgData = (img as ImageBitmapProvider).getData();
         } else {
-            imgData = img;
+            imgData = img as Exclude<ImageLike, ImageBitmapProvider>;
         }
 
         /** @todo: If the image is an instance of canvas, this
