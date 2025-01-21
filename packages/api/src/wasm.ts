@@ -616,17 +616,20 @@ export class WASM {
         const img = this._images[index];
         if (!img) return;
 
+        const imgType = this._imageTypes[index];
         this._images[index] = null;
         this._imageTypes[index] = ImageType.Compressed;
 
-        if ((img as HTMLImageElement).src !== undefined) {
-            (img as HTMLImageElement).src = '';
-        }
-        if ((img as HTMLImageElement).onload !== undefined) {
-            img.onload = null;
-        }
-        if ((img as HTMLImageElement).onerror !== undefined) {
-            img.onerror = null;
+        if (imgType === ImageType.Image || imgType === ImageType.Video) {
+            if ((img as HTMLImageElement | HTMLVideoElement).src !== undefined) {
+                (img as HTMLImageElement | HTMLVideoElement).src = '';
+            }
+            if ((img as HTMLImageElement | HTMLVideoElement).onload !== undefined) {
+                (img as HTMLImageElement | HTMLVideoElement).onload = null;
+            }
+            if ((img as HTMLImageElement | HTMLVideoElement).onerror !== undefined) {
+                (img as HTMLImageElement | HTMLVideoElement).onerror = null;
+            }
         }
     }
     protected _wljs_objects_markDestroyed(
