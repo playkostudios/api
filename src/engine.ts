@@ -142,6 +142,11 @@ export class WonderlandEngine {
     readonly onSceneLoaded = new Emitter();
 
     /**
+     * {@link Emitter} for component errors.
+     */
+    readonly onError = new Emitter<[error: unknown]>();
+
+    /**
      * Current main scene.
      */
     readonly scene: Scene = null!;

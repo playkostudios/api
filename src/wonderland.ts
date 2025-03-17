@@ -945,6 +945,7 @@ export class Component {
                     `Exception during ${this.type} init() on object ${this.object.name}`
                 );
                 this.engine.log.error(LogTag.Component, e);
+                this._engine.onError.notify(e);
             }
         }
 
@@ -961,6 +962,7 @@ export class Component {
                     `Exception during ${this.type} validateProperties() on object ${this.object.name}`
                 );
                 this.engine.log.error(LogTag.Component, e);
+                this._engine.onError.notify(e);
                 failed = true;
             }
 
@@ -972,6 +974,7 @@ export class Component {
                     `Exception during ${this.type} start() on object ${this.object.name}`
                 );
                 this.engine.log.error(LogTag.Component, e);
+                this._engine.onError.notify(e);
                 failed = true;
             }
 
@@ -990,6 +993,7 @@ export class Component {
                     `Exception during ${this.type} onActivate() on object ${this.object.name}`
                 );
                 this.engine.log.error(LogTag.Component, e);
+                this._engine.onError.notify(e);
             }
         };
     }
@@ -1011,6 +1015,7 @@ export class Component {
                 `Exception during ${this.type} update() on object ${this.object.name}`
             );
             this.engine.log.error(LogTag.Component, e);
+            this._engine.onError.notify(e);
             if (this._engine.wasm._deactivate_component_on_error) {
                 this.active = false;
             }
@@ -1034,6 +1039,7 @@ export class Component {
                 `Exception during ${this.type} onActivate() on object ${this.object.name}`
             );
             this.engine.log.error(LogTag.Component, e);
+            this._engine.onError.notify(e);
         }
     }
 
@@ -1054,6 +1060,7 @@ export class Component {
                 `Exception during ${this.type} onDeactivate() on object ${this.object.name}`
             );
             this.engine.log.error(LogTag.Component, e);
+            this._engine.onError.notify(e);
         }
     }
 
@@ -1073,6 +1080,7 @@ export class Component {
                 `Exception during ${this.type} onDestroy() on object ${this.object.name}`
             );
             this.engine.log.error(LogTag.Component, e);
+            this._engine.onError.notify(e);
         }
         this._engine._destroyComponent(this);
     }

@@ -756,6 +756,7 @@ export class WASM {
                 `Exception during instantiation of component ${ctor.TypeName}`
             );
             this._log.error(LogTag.Component, e);
+            this._engine.onError.notify(e);
             component = new BrokenComponent(this._engine);
         }
         /* Sets the manager and identifier from the outside, to simplify the user's constructor. */
@@ -773,6 +774,7 @@ export class WASM {
                 `Exception during ${component.type} resetProperties() on object ${component.object.name}`
             );
             this._log.error(LogTag.Component, e);
+            this._engine.onError.notify(e);
         }
 
         this._components[index] = component;
@@ -813,6 +815,7 @@ export class WASM {
                 `Exception during ${destComp.type} copy() on object ${destComp.object.name}`
             );
             this._log.error(LogTag.Component, e);
+            this._engine.onError.notify(e);
         }
     }
 }
