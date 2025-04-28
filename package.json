@@ -1,6 +1,6 @@
 {
   "name": "@wonderlandengine/api",
-  "version": "1.1.5+playko-patches-2",
+  "version": "1.1.5+playko-patches-3",
   "description": "Wonderland Engine's JavaScript API.",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

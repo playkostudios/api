@@ -402,6 +402,7 @@ export class Scene {
 
         try {
             /** @todo: Remove third parameter at 1.2.0 */
+            this._trigger_onDestroy_all();
             wasm._wl_load_scene_bin(ptr, size, wasm.tempUTF8(filename));
         } finally {
             /* Catch calls to abort(), e.g. via asserts */
@@ -660,7 +661,22 @@ export class Scene {
      * This method deletes all used and allocated objects, and components.
      */
     reset() {
+        this._trigger_onDestroy_all();
         this._engine.wasm._wl_scene_reset();
         this._baseURL = '';
+    }
+
+    private _trigger_onDestroy_all() {
+        const engine = this._engine;
+        const jsManagerIndex = engine.wasm._jsManagerIndex;
+        const stack = [engine.wrapObject(0)];
+        let next;
+        while (next = stack.pop()) {
+            for (const comp of next.getComponents()) {
+                if (comp._manager === jsManagerIndex) comp._triggerOnDestroy();
+            }
+
+            stack.push.apply(stack, next.children);
+        }
     }
 }

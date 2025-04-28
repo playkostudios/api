@@ -3,7 +3,7 @@
  */
 
 import {nativeProperty, enumerable} from './decorators.js';
-import {WonderlandEngine} from './engine.js';
+import {WonderlandEngine, DESTROYED_MARKER} from './engine.js';
 import {isNumber, isString} from './utils/object.js';
 import {Emitter} from './utils/event.js';
 import {ComponentProperty} from './property.js';
@@ -1072,6 +1072,8 @@ export class Component {
      * @hidden
      */
     _triggerOnDestroy() {
+        if ((this as any)[DESTROYED_MARKER]) return;
+
         try {
             if (this.onDestroy) this.onDestroy();
         } catch (e) {

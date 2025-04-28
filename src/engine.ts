@@ -28,6 +28,8 @@ import {TextureManager} from './texture-manager.js';
 import {Logger} from './utils/logger.js';
 import {LogTag} from './index.js';
 
+export const DESTROYED_MARKER = Symbol('component_destroyed');
+
 function checkXRSupport() {
     if (!navigator.xr) {
         const isLocalhost =
@@ -761,6 +763,7 @@ export class WonderlandEngine {
         const manager = instance._manager;
         (instance._id as number) = -1;
         (instance._manager as number) = -1;
+        (instance as any)[DESTROYED_MARKER] = true;
 
         /* Destroy the prototype of this instance to avoid using a dangling component */
         if (this.erasePrototypeOnDestroy && instance) {
