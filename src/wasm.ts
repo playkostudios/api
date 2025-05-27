@@ -304,8 +304,8 @@ export class WASM {
         for (const img of this._images) {
             if (!img || !(img as HTMLImageElement).src) continue;
             (img as HTMLImageElement).src = '';
-            img.onload = null;
-            img.onerror = null;
+            (img as HTMLImageElement).onload = null;
+            (img as HTMLImageElement).onerror = null;
         }
         this._images = [];
         this.allocateTempMemory(1024);

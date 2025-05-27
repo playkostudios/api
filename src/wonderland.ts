@@ -10,7 +10,7 @@ import {ComponentProperty} from './property.js';
 import {WASM} from './wasm.js';
 
 /** Element that can be used as an image in the engine. */
-export type ImageLike = HTMLImageElement | HTMLVideoElement | HTMLCanvasElement;
+export type ImageLike = HTMLImageElement | HTMLVideoElement | HTMLCanvasElement | OffscreenCanvas;
 
 /**
  * A type alias for any TypedArray constructor, except big-int arrays.
@@ -3652,11 +3652,14 @@ export class Texture {
     constructor(engine: WonderlandEngine, param: ImageLike | number) {
         this._engine = engine ?? WL;
         const wasm = engine.wasm;
+        const isOffscreenCanvas = param instanceof OffscreenCanvas;
         if (
+            isOffscreenCanvas ||
             param instanceof HTMLImageElement ||
             param instanceof HTMLVideoElement ||
             param instanceof HTMLCanvasElement
         ) {
+            if (isOffscreenCanvas) (param as any)['complete'] = true;
             const index = wasm._images.length;
             wasm._images.push(param);
             this._imageIndex = index;

@@ -14,7 +14,10 @@ export function imagePromise<T extends HTMLImageElement | HTMLCanvasElement>(
     image: T | null
 ): Promise<T> {
     if (!image) return Promise.reject('image is null');
-    if (image instanceof HTMLCanvasElement) return Promise.resolve(image);
+    if (image instanceof HTMLCanvasElement ||
+        image instanceof OffscreenCanvas) {
+        return Promise.resolve(image);
+    }
 
     const img = image as HTMLImageElement;
     if (img.complete) return Promise.resolve(img as T);
